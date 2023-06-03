@@ -109,4 +109,6 @@ for st in ${PIPESTATUS[@]}; do
   fi
 done
 
+echo ${ALLURE_REPORT_URL}
+
 exit 0

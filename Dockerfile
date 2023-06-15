@@ -7,16 +7,18 @@ ENV PATH $PATH:${ALLURE_HOME}/bin
 
 WORKDIR /home/allure
 
-COPY send_results.sh .
-
 RUN apk update \
     && apk add --no-cache curl jq bash unzip openjdk11 \
     && curl ${ALLURE_URL}/${ALLURE_VER}/allure-commandline-${ALLURE_VER}.zip \
     -L -o /tmp/allure-commandline.zip \
     && unzip -q /tmp/allure-commandline.zip -d ./ \
     && rm -rf /tmp/* \
-    && chmod -R +x ${ALLURE_HOME}/bin send_results.sh \
-    && apk del unzip
+    && apk del unzip \
+    && chmod -R +x ${ALLURE_HOME}/bin
+
+USER nobody
+
+COPY --chown=nobody:nogroup send_results.sh .
 
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD [ "sleep", "infinity" ]
